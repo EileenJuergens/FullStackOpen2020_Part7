@@ -52,20 +52,33 @@ const Footer = () => (
   </div>
 )
 
-const CreateNew = (props) => {
+const CreateNew = ({ addNew, setNotification }) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
+  const navigate = useNavigate()
 
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    props.addNew({
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+
+    await addNew({
       content,
       author,
       info,
       votes: 0
     })
+
+    setNotification(`A new anecdote ${content} created!`)
+    navigate('/')
+
+    event.target.content.value = ''
+    event.target.author.value = ''
+    event.target.info.value = ''
+
+    setTimeout(() => {
+      setNotification('')
+    }, 5000)
   }
 
   return (
@@ -148,10 +161,11 @@ const App = () => {
         <Link style={padding} to='/create'>create new</Link>
         <Link style={padding} to='/about'>about</Link>
       </div>
+      <p>{notification}</p>
       <Routes>
         <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path="anecdotes/:id" element={<Anecdote anecdote={anecdote} />} /> 
-        <Route path='/create' element={<CreateNew addNew={addNew} />} />
+        <Route path='/create' element={<CreateNew addNew={addNew} setNotification={setNotification} />} />
         <Route path='/about' element={<About />} />
       </Routes>
       <Footer />
