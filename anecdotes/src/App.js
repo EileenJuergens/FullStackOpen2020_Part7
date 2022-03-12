@@ -71,21 +71,22 @@ const CreateNew = ({ addNew, setNotification }) => {
 
     setNotification(`A new anecdote ${content.value} created!`)
     navigate('/')
-
-    // Eileen is this still needed?
-    // event.target.content.value = ''
-    // event.target.author.value = ''
-    // event.target.info.value = ''
-
+    
     setTimeout(() => {
       setNotification('')
     }, 5000)
+  }
+  
+  const handleReset = () => {
+    content.onReset()
+    author.onReset()
+    info.onReset()
   }
 
   return (
     <div>
       <h2>create a new anecdote</h2>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div>
           content
           <input name='content' {...content} />
@@ -98,7 +99,8 @@ const CreateNew = ({ addNew, setNotification }) => {
           url for more info
           <input name='info' {...info} />
         </div>
-        <button>create</button>
+        <button type='submit' onClick={handleSubmit}>create</button>
+        <button type='button' onClick={handleReset}>reset</button>
       </form>
     </div>
   )
